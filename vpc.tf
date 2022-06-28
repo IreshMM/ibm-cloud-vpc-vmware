@@ -20,7 +20,7 @@ resource "ibm_is_subnet" "vmw-host-mgmt-subnet" {
 
 resource "ibm_is_subnet" "vmw-inst-mgmt-subnet" {
   depends_on = [ ibm_is_vpc_address_prefix.vmware-vpc-prefix ]
-  name            = "vmw-host-inst-subnet"
+  name            = "vmw-inst-mgmt-subnet"
   vpc             = ibm_is_vpc.vmw.id
   zone            = var.zone
   ipv4_cidr_block = "10.97.0.128/25"

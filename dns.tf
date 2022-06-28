@@ -19,10 +19,27 @@ resource "ibm_dns_permitted_network" "vmware-dns-zone-permitted-network" {
     type = "vpc"
 }
 
-resource "ibm_dns_resource_record" "test-pdns-resource-record-a" {
+resource "ibm_dns_resource_record" "BMS00X-records" {
   instance_id = ibm_resource_instance.vmware-dns.guid
   zone_id     = ibm_dns_zone.vmware-dns-zone.zone_id
   type        = "A"
-  name        = "testA"
-  rdata       = "1.2.3.4"
+  name        = "esx-00${count.index}"
+  rdata       = ibm_is_bare_metal_server.BMS00X[count.index].primary_network_interface[0].primary_ip[0].address
+  count = 3
+}
+
+resource "ibm_dns_resource_record" "vcenter-record" {
+  instance_id = ibm_resource_instance.vmware-dns.guid
+  zone_id     = ibm_dns_zone.vmware-dns-zone.zone_id
+  type        = "A"
+  name        = "vcenter"
+  rdata       = ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address
+}
+
+resource "ibm_dns_resource_record" "vcenter-record-reverse" {
+  instance_id = ibm_resource_instance.vmware-dns.guid
+  zone_id     = ibm_dns_zone.vmware-dns-zone.zone_id
+  type        = "PTR"
+  name        = ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address
+  rdata       = "vcenter.${ibm_dns_zone.vmware-dns-zone.name}"
 }
