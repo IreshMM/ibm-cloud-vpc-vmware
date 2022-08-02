@@ -3,15 +3,15 @@ resource "ibm_is_bare_metal_server" "BMS00X" {
   name    = "esx-00${count.index}"
   image   = "r010-3fe32f09-0937-49a8-a8e6-01572a416d2c"
   zone    = var.zone
-  keys    = [ibm_is_ssh_key.cloud-workstation-1.id]
+  keys    = [ibm_is_ssh_key.iresh-pc.id]
   primary_network_interface {
     name   = "pci-nic-vmnic0-vmk0"
-    subnet = ibm_is_subnet.vmw-host-mgmt-subnet.id
+    subnet = ibm_is_subnet.vmw-host-subnet.id
     primary_ip {
-      address = "10.97.0.1${count.index}"
+      address = "10.1.1.1${count.index}"
       auto_delete = true
     }
-    allowed_vlans = [ 100,200,300 ]
+    allowed_vlans = [ 100,200,300,400 ]
   }
   vpc   = ibm_is_vpc.vmw.id
   user_data = <<EOT
@@ -27,28 +27,67 @@ resource "ibm_is_bare_metal_server" "BMS00X" {
   count = var.bare-metal-count
 }
 
-resource "ibm_is_bare_metal_server_network_interface" "vmotion-nics" {
-  bare_metal_server = ibm_is_bare_metal_server.BMS00X[count.index].id
-  subnet = ibm_is_subnet.vmw-vmot-subnet.id
-  name   = "vlan-nic-vmotion-vmk2"
-  vlan = 200
-  allow_interface_to_float = false
-  count = var.bare-metal-count
-}
-
-resource "ibm_is_bare_metal_server_network_interface" "vsan-nics" {
-  bare_metal_server = ibm_is_bare_metal_server.BMS00X[count.index].id
-  subnet = ibm_is_subnet.vmw-vsan-subnet.id
-  name   = "vlan-nic-vsan-vmk3"
-  vlan = 300
-  allow_interface_to_float = false
-  count = var.bare-metal-count
-}
-
 resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
-  bare_metal_server = ibm_is_bare_metal_server.BMS00X[0].id
-  subnet = ibm_is_subnet.vmw-inst-mgmt-subnet.id
-  name   = "vlan-nic-vcenter"
-  vlan = 100
-  allow_interface_to_float = true
+  bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
+  allow_interface_to_float  = false
+  allow_ip_spoofing         = false
+  enable_infrastructure_nat = true
+  name                      = "vmware-vcenter-nic"
+  subnet = ibm_is_subnet.vmw-mgmt-subnet.id
+  vlan   = 100
+  primary_ip {
+    address     = "10.1.2.10"
+    auto_delete = true
+  }
+}
+
+resource "ibm_is_bare_metal_server_network_interface" "apic-subsys-nics" {
+  for_each = {
+    apic-mgr-nic         = "192.168.70.11"
+    apic-anytcs-nic      = "192.168.70.12"
+    apic-devptl-nic      = "192.168.70.13"
+  }
+  bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
+  subnet                   = ibm_is_subnet.vmw-apic-subsys-subnet.id
+  name                     = each.key
+  vlan                     = 200
+  allow_interface_to_float = false
+  primary_ip {
+    address     = each.value
+    auto_delete = true
+  }
+}
+
+resource "ibm_is_bare_metal_server_network_interface" "apic-gw-frontend-nics" {
+  for_each = {
+    pr-apic-dpgw1-nic-frontend = "172.22.10.11"
+    pr-apic-dpgw2-nic-frontend = "172.22.10.12"
+    pr-apic-dpgw3-nic-frontend = "172.22.10.13"
+  }
+  bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
+  subnet                   = ibm_is_subnet.vmw-apic-gw-frontend-subnet.id
+  name                     = each.key
+  vlan                     = 300
+  allow_interface_to_float = false
+  primary_ip {
+    address     = each.value
+    auto_delete = true
+  }
+}
+
+resource "ibm_is_bare_metal_server_network_interface" "apic-gw-backend-nics" {
+  for_each = {
+    pr-apic-dpgw1-nic-backend = "172.22.10.139"
+    pr-apic-dpgw2-nic-backend = "172.22.10.140"
+    pr-apic-dpgw3-nic-backend = "172.22.10.141"
+  }
+  bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
+  subnet                   = ibm_is_subnet.vmw-apic-gw-backend-subnet.id
+  name                     = each.key
+  vlan                     = 400
+  allow_interface_to_float = false
+  primary_ip {
+    address     = each.value
+    auto_delete = true
+  }
 }
