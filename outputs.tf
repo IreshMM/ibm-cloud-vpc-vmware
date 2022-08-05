@@ -1,5 +1,5 @@
-output "jump-001-fip" {
-    value = ibm_is_floating_ip.jump-001-fip.address
+output "jump-host-fip" {
+    value = ibm_is_floating_ip.jump-host-fip.address
 }
 
 output "vcenter-ip" {

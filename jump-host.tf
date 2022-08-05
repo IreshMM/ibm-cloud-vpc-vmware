@@ -7,23 +7,25 @@ resource "ibm_is_instance" "jump-host" {
     subnet = ibm_is_subnet.vmw-mgmt-subnet.id
   }
 
-  vpc  = ibm_is_vpc.vmw.id
-  zone = var.zone
-  keys = [ibm_is_ssh_key.iresh-pc.id]
+  vpc            = ibm_is_vpc.vmw.id
+  zone           = var.zone
+  keys           = [ibm_is_ssh_key.iresh-pc.id]
+  resource_group = ibm_resource_group.VMware.id
 }
 
 resource "ibm_is_floating_ip" "jump-host-fip" {
-  name   = "jump-host-fip"
-  target = ibm_is_instance.jump-host.primary_network_interface[0].id
+  name           = "jump-host-fip"
+  target         = ibm_is_instance.jump-host.primary_network_interface[0].id
+  resource_group = ibm_resource_group.VMware.id
 }
 
 data "ibm_is_instance_network_interface" "jump-host-nic" {
-    instance_name = ibm_is_instance.jump-host.name
-    network_interface_name = ibm_is_instance.jump-host.primary_network_interface[0].name
+  instance_name          = ibm_is_instance.jump-host.name
+  network_interface_name = ibm_is_instance.jump-host.primary_network_interface[0].name
 }
 
 resource "ibm_is_security_group_rule" "allow-ssh" {
-  group     = data.ibm_is_instance_network_interface.jump-host.security_groups[0].id
+  group     = data.ibm_is_instance_network_interface.jump-host-nic.security_groups[0].id
   direction = "inbound"
   remote    = "0.0.0.0/0"
   tcp {
