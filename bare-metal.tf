@@ -1,6 +1,6 @@
-resource "ibm_is_bare_metal_server" "BMS00X" {
-  profile = "bx2d-metal-96x384"
-  name    = "esx-00${count.index}"
+resource "ibm_is_bare_metal_server" "esxi-host" {
+  profile = "cx2d-metal-96x192"
+  name    = "esxi-host"
   image   = "r010-3fe32f09-0937-49a8-a8e6-01572a416d2c"
   zone    = var.zone
   keys    = [ibm_is_ssh_key.iresh-pc.id]
@@ -8,7 +8,7 @@ resource "ibm_is_bare_metal_server" "BMS00X" {
     name   = "pci-nic-vmnic0-vmk0"
     subnet = ibm_is_subnet.vmw-host-subnet.id
     primary_ip {
-      address = "10.1.1.1${count.index}"
+      address = "10.1.1.10"
       auto_delete = true
     }
     allowed_vlans = [ 100,200,300,400 ]
@@ -22,9 +22,8 @@ resource "ibm_is_bare_metal_server" "BMS00X" {
                 vim-cmd hostsvc/enable_esx_shell
                 vim-cmd hostsvc/start_esx_shell
                 # Attempting to set the hostname
-                esxcli system hostname set --fqdn=esx-00${count.index}.vmware.ibmcloud.local
+                esxcli system hostname set --fqdn=esxi-host.vmware.ibmcloud.local
                 EOT
-  count = var.bare-metal-count
 }
 
 resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
