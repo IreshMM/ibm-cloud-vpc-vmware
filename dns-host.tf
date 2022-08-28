@@ -5,8 +5,11 @@ resource "ibm_is_instance" "dns-host" {
 
   primary_network_interface {
     subnet = ibm_is_subnet.vmw-mgmt-subnet.id
-    primary_ipv4_address = "10.1.2.5"
     allow_ip_spoofing = false
+    primary_ip {
+      address = "10.1.2.5"
+      auto_delete = true
+    }
   }
   vpc            = ibm_is_vpc.vmw.id
   zone           = var.zone
