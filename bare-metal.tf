@@ -55,6 +55,7 @@ resource "ibm_is_bare_metal_server_network_interface" "apic-subsys-nics" {
     address     = each.value
     auto_delete = true
   }
+  depends_on = [ibm_is_subnet.vmw-apic-subsys-subnet]
 }
 
 resource "ibm_is_bare_metal_server_network_interface" "apic-gw-frontend-nics" {
