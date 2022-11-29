@@ -8,13 +8,13 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
     name   = "pci-nic-vmnic0-vmk0"
     subnet = ibm_is_subnet.vmw-host-subnet.id
     primary_ip {
-      address = "10.1.1.10"
+      address     = "10.1.1.10"
       auto_delete = true
     }
-    allowed_vlans = [ 100,200,300,400 ]
+    allowed_vlans = [100, 200, 300, 400]
   }
-  vpc   = ibm_is_vpc.vmw.id
-  user_data = <<EOT
+  vpc            = ibm_is_vpc.vmw.id
+  user_data      = <<EOT
                 # enable & start SSH
                 vim-cmd hostsvc/enable_ssh
                 vim-cmd hostsvc/start_ssh
@@ -27,13 +27,13 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
 }
 
 resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
-  bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
+  bare_metal_server         = ibm_is_bare_metal_server.esxi-host.id
   allow_interface_to_float  = false
   allow_ip_spoofing         = false
   enable_infrastructure_nat = true
   name                      = "vmware-vcenter-nic"
-  subnet = ibm_is_subnet.vmw-mgmt-subnet.id
-  vlan   = 100
+  subnet                    = ibm_is_subnet.vmw-mgmt-subnet.id
+  vlan                      = 100
   primary_ip {
     address     = "10.1.2.10"
     auto_delete = true
@@ -42,9 +42,9 @@ resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
 
 resource "ibm_is_bare_metal_server_network_interface" "apic-subsys-nics" {
   for_each = {
-    apic-mgr-nic         = "192.168.70.11"
-    apic-anytcs-nic      = "192.168.70.12"
-    apic-devptl-nic      = "192.168.70.13"
+    apic-mgr-nic    = "192.168.72.11"
+    apic-anytcs-nic = "192.168.72.12"
+    apic-devptl-nic = "192.168.72.13"
   }
   bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
   subnet                   = ibm_is_subnet.vmw-apic-subsys-subnet.id
