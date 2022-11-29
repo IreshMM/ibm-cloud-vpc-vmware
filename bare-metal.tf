@@ -61,9 +61,9 @@ resource "ibm_is_bare_metal_server_network_interface" "apic-subsys-nics" {
 
 resource "ibm_is_bare_metal_server_network_interface" "apic-gw-frontend-nics" {
   for_each = {
-    pr-apic-dpgw1-nic-frontend = "172.22.10.11"
-    pr-apic-dpgw2-nic-frontend = "172.22.10.12"
-    pr-apic-dpgw3-nic-frontend = "172.22.10.13"
+    pr-apic-dpgw1-nic-frontend = "192.168.73.11"
+    pr-apic-dpgw2-nic-frontend = "192.168.73.12"
+    pr-apic-dpgw3-nic-frontend = "192.168.73.13"
   }
   bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
   subnet                   = ibm_is_subnet.vmw-apic-gw-frontend-subnet.id
@@ -78,9 +78,9 @@ resource "ibm_is_bare_metal_server_network_interface" "apic-gw-frontend-nics" {
 
 resource "ibm_is_bare_metal_server_network_interface" "apic-gw-backend-nics" {
   for_each = {
-    pr-apic-dpgw1-nic-backend = "172.22.10.139"
-    pr-apic-dpgw2-nic-backend = "172.22.10.140"
-    pr-apic-dpgw3-nic-backend = "172.22.10.141"
+    pr-apic-dpgw1-nic-backend = "192.168.73.139"
+    pr-apic-dpgw2-nic-backend = "192.168.73.140"
+    pr-apic-dpgw3-nic-backend = "192.168.73.141"
   }
   bare_metal_server        = ibm_is_bare_metal_server.esxi-host.id
   subnet                   = ibm_is_subnet.vmw-apic-gw-backend-subnet.id
