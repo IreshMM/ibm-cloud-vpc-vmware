@@ -14,14 +14,14 @@ resource "ibm_is_vpc_address_prefix" "apic-subsys-vpc-prefix" {
   name = "apic-subsys-vpc-prefix"
   zone = var.zone
   vpc  = ibm_is_vpc.vmw.id
-  cidr = "172.22.10.0/24"
+  cidr = "192.168.72.0/24"
 }
 
 resource "ibm_is_vpc_address_prefix" "apic-gw-vpc-prefix" {
   name = "apic-gw-vpc-prefix"
   zone = var.zone
   vpc  = ibm_is_vpc.vmw.id
-  cidr = "192.168.70.0/24"
+  cidr = "172.22.10.0/24"
 }
 
 resource "ibm_is_subnet" "vmw-host-subnet" {
@@ -47,7 +47,7 @@ resource "ibm_is_subnet" "vmw-apic-subsys-subnet" {
   name            = "vmw-apic-subsys-subnet"
   vpc             = ibm_is_vpc.vmw.id
   zone            = var.zone
-  ipv4_cidr_block = "192.168.70.0/25"
+  ipv4_cidr_block = "192.168.72.0/25"
   resource_group  = ibm_resource_group.VMware.id
 }
 
