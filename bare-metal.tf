@@ -24,6 +24,7 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
                 # Attempting to set the hostname
                 esxcli system hostname set --fqdn=esxi-host.vmware.ibmcloud.local
                 EOT
+  resource_group = ibm_resource_group.VMware.id
 }
 
 resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
