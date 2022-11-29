@@ -3,7 +3,7 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
   name    = "esxi-host"
   image   = "r010-3fe32f09-0937-49a8-a8e6-01572a416d2c"
   zone    = var.zone
-  keys    = [ibm_is_ssh_key.iresh-pc.id]
+  keys    = [data.ibm_is_ssh_key.iresh-pc.id]
   primary_network_interface {
     name   = "pci-nic-vmnic0-vmk0"
     subnet = ibm_is_subnet.vmw-host-subnet.id

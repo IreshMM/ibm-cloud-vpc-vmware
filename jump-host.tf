@@ -9,7 +9,7 @@ resource "ibm_is_instance" "jump-host" {
 
   vpc            = ibm_is_vpc.vmw.id
   zone           = var.zone
-  keys           = [ibm_is_ssh_key.iresh-pc.id]
+  keys           = [data.ibm_is_ssh_key.iresh-pc.id]
   resource_group = ibm_resource_group.VMware.id
 }
 
