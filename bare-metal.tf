@@ -13,7 +13,7 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
     }
     allowed_vlans = [100, 200, 300, 400]
   }
-  vpc            = ibm_is_vpc.vmw.id
+  vpc            = ibm_is_vpc.vmw-apic.id
   user_data      = <<EOT
                 # enable & start SSH
                 vim-cmd hostsvc/enable_ssh

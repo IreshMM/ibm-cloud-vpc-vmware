@@ -11,7 +11,7 @@ resource "ibm_is_instance" "dns-host" {
       auto_delete = true
     }
   }
-  vpc            = ibm_is_vpc.vmw.id
+  vpc            = ibm_is_vpc.vmw-apic.id
   zone           = var.zone
   keys           = [data.ibm_is_ssh_key.iresh-pc.id]
   resource_group = ibm_resource_group.VMware.id
