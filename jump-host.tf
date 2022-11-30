@@ -1,6 +1,6 @@
 resource "ibm_is_instance" "jump-host" {
   name    = "jump-host"
-  image   = "r010-eaebade7-d050-4e4d-b552-c45e53c9a893"
+  image   = "r006-b5427052-bf0d-400a-a55c-e70894560b96"
   profile = "cx2-2x4"
 
   primary_network_interface {
