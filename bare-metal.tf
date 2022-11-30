@@ -23,6 +23,8 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
                 vim-cmd hostsvc/start_esx_shell
                 # Attempting to set the hostname
                 esxcli system hostname set --fqdn=esxi-host.vmware.ibmcloud.local
+                esxcli network vswitch standard portgroup add -p pg-mgmt -v vSwitch0
+                esxcli network vswitch standard portgroup set -p pg-mgmt -v 100
                 EOT
   resource_group = ibm_resource_group.VMware.id
 }
