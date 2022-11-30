@@ -27,6 +27,7 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
                 esxcli network vswitch standard portgroup set -p pg-mgmt -v 100
                 EOT
   resource_group = ibm_resource_group.VMware.id
+
 }
 
 resource "ibm_is_bare_metal_server_network_interface" "vcenter-nic" {
@@ -92,5 +93,27 @@ resource "ibm_is_bare_metal_server_network_interface" "apic-gw-backend-nics" {
   primary_ip {
     address     = each.value
     auto_delete = true
+  }
+}
+
+data "ibm_is_bare_metal_server_initialization" "esxi-host-init" {
+  bare_metal_server = ibm_is_bare_metal_server.esxi-host.id
+  private_key       = file("/home/iresh/.ssh/id_rsa")
+}
+
+resource "null_resource" "vcenter-provisioner" {
+  depends_on = [
+    ibm_is_bare_metal_server.esxi-host,
+    ibm_is_instance.jump-host
+  ]
+  provisioner "local-exec" {
+    interpreter = [
+      "/usr/bin/bash", "-c"
+    ]
+
+    working_dir = "/home/iresh/Documents/playground/ansible/vcenter-provision"
+
+    command = "ansible-playbook -t vcenter-deploy --extra-vars 'esxi_host_password=${data.ibm_is_bare_metal_server_initialization.esxi-host-init.user_accounts[0].password} vcenter_ip_address=${ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address}' -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root main.yaml"
+
   }
 }
