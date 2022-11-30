@@ -1,7 +1,7 @@
 resource "ibm_is_bare_metal_server" "esxi-host" {
-  profile = "cx2d-metal-96x192"
+  profile = "cx2-metal-96x192"
   name    = "esxi-host"
-  image   = "r010-3fe32f09-0937-49a8-a8e6-01572a416d2c"
+  image   = "r006-41460465-7a20-4bc8-b7b0-d8c058e34208"
   zone    = var.zone
   keys    = [data.ibm_is_ssh_key.iresh-pc.id]
   primary_network_interface {
