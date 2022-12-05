@@ -98,7 +98,7 @@ resource "ibm_is_bare_metal_server_network_interface" "apic-gw-backend-nics" {
 
 data "ibm_is_bare_metal_server_initialization" "esxi-host-init" {
   bare_metal_server = ibm_is_bare_metal_server.esxi-host.id
-  private_key       = file("/home/iresh/.ssh/id_rsa")
+  private_key       = file(var.ssh_private_key)
 }
 
 resource "null_resource" "vcenter-provisioner" {
