@@ -48,3 +48,17 @@ resource "ibm_is_security_group_rule" "allow-ssh" {
     port_max = 22
   }
 }
+
+resource "null_resource" "jump-host-provisioner" {
+  depends_on = [
+    ibm_is_instance.jump-host,
+    ibm_is_floating_ip.jump-host-fip
+  ]
+  provisioner "local-exec" {
+    interpreter = [
+      "/usr/bin/bash", "-c"
+    ]
+    working_dir = "./external/provisioners/jump-host-provision"
+    command = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
+  }
+}
