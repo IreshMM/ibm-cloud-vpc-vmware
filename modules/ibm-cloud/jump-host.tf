@@ -31,7 +31,6 @@ resource "ibm_is_instance" "jump-host" {
 resource "ibm_is_floating_ip" "jump-host-fip" {
   name           = "jump-host-fip"
   target         = ibm_is_instance.jump-host.primary_network_interface[0].id
-  resource_group = ibm_resource_group.VMware.id
 }
 
 data "ibm_is_instance_network_interface" "jump-host-nic" {
@@ -58,7 +57,7 @@ resource "null_resource" "jump-host-provisioner" {
     interpreter = [
       "/usr/bin/bash", "-c"
     ]
-    working_dir = "./external/provisioners/jump-host-provision"
+    working_dir = "${path.module}/external/provisioners/jump-host-provision"
     command = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
   }
 }

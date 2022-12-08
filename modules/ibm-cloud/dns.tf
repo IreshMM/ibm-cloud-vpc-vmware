@@ -36,6 +36,7 @@ resource "ibm_dns_resource_record" "vcenter-record" {
 }
 
 resource "ibm_dns_resource_record" "vcenter-record-reverse" {
+  depends_on = [ ibm_dns_resource_record.vcenter-record ]
   instance_id = ibm_resource_instance.vmware-dns.guid
   zone_id     = ibm_dns_zone.vmware-dns-zone.zone_id
   type        = "PTR"

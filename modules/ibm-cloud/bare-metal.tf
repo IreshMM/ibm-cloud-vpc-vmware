@@ -111,7 +111,7 @@ resource "null_resource" "vcenter-provisioner" {
     interpreter = [
       "/usr/bin/bash", "-c"
     ]
-    working_dir = "./external/provisioners/vcenter-provision"
+    working_dir = "${path.module}/external/provisioners/vcenter-provision"
     command = "ansible-playbook -t vcenter-deploy --extra-vars 'esxi_host_password=${data.ibm_is_bare_metal_server_initialization.esxi-host-init.user_accounts[0].password} vcenter_ip_address=${ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address}' -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root main.yaml"
   }
 }
