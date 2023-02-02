@@ -1,12 +1,24 @@
-output "jump-host-fip" {
-    value = ibm_is_floating_ip.jump-host-fip.address
+output "jump_host_fip" {
+  value = module.common.jump_host_fip
 }
 
-output "vcenter-ip" {
-    value = ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address
+output "vcenter_ip" {
+  value = module.vsphere-site.vcenter_ip
 }
 
-output "esxi-host-password" {
-    value = data.ibm_is_bare_metal_server_initialization.esxi-host-init.user_accounts[0].password
-    sensitive = true
+output "vcenter_fqdn" {
+  value = module.vsphere-site.vcenter_fqdn
+}
+
+output "vcenter_domain" {
+  value = module.vsphere-site.vcenter_domain
+}
+
+output "esxi_host_fqdn" {
+  value = module.vsphere-site.esxi_host_fqdn
+}
+
+output "esxi_host_password" {
+  value     = module.vsphere-site.esxi_host_password
+  sensitive = true
 }

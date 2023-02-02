@@ -1,16 +1,14 @@
 resource "ibm_is_instance" "jump-host" {
   name    = "jump-host"
-  image   = "r006-b5427052-bf0d-400a-a55c-e70894560b96"
+  image   = data.ibm_is_image.jump-host-os-image.id
   profile = "cx2-2x4"
 
   primary_network_interface {
-    subnet = ibm_is_subnet.vmw-mgmt-subnet.id
+    subnet = ibm_is_subnet.default-vpc-subnet.id
   }
 
   vpc            = ibm_is_vpc.vmw-apic.id
-  zone           = var.zone
   keys           = [data.ibm_is_ssh_key.iresh-pc.id]
-  resource_group = ibm_resource_group.VMware.id
   user_data      = <<EOT
                 #cloud-config
                 hostname: jump-host
@@ -26,11 +24,16 @@ resource "ibm_is_instance" "jump-host" {
                     ssh_authorized_keys:
                       - ${file(var.ssh_public_key)}
                 EOT
+  zone = var.zone
+}
+
+data "ibm_is_image" "jump-host-os-image" {
+  name = var.jump_host_os_image
 }
 
 resource "ibm_is_floating_ip" "jump-host-fip" {
-  name           = "jump-host-fip"
-  target         = ibm_is_instance.jump-host.primary_network_interface[0].id
+  name   = "jump-host-fip"
+  target = ibm_is_instance.jump-host.primary_network_interface[0].id
 }
 
 data "ibm_is_instance_network_interface" "jump-host-nic" {
@@ -58,6 +61,6 @@ resource "null_resource" "jump-host-provisioner" {
       "/usr/bin/bash", "-c"
     ]
     working_dir = "${path.module}/external/provisioners/jump-host-provision"
-    command = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
+    command     = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
   }
 }

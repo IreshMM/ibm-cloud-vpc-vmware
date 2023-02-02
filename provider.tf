@@ -1,5 +1,4 @@
 provider "ibm" {
-  alias                 = "ibmcloud"
   region                = var.region
   zone                  = var.zone
   ibmcloud_api_key      = var.ibmcloud_api_key
@@ -7,11 +6,21 @@ provider "ibm" {
   iaas_classic_api_key  = var.iaas_classic_api_key
 }
 
+provider "ibm" {
+  alias                 = "ibmcloud"
+  region                = var.region
+  zone                  = var.zone
+  ibmcloud_api_key      = var.ibmcloud_api_key
+  iaas_classic_username = var.iaas_classic_username
+  iaas_classic_api_key  = var.iaas_classic_api_key
+  resource_group        = ibm_resource_group.VMware.id
+}
+
 provider "vsphere" {
   alias                = "vsphere"
-  user                 = var.vsphere_user
+  user                 = "administrator@${module.ibm-cloud-infr.vcenter_domain}"
   password             = var.vsphere_password
-  vsphere_server       = var.vsphere_server
+  vsphere_server       = "${module.ibm-cloud-infr.vcenter_fqdn}:4443"
   allow_unverified_ssl = true
 }
 

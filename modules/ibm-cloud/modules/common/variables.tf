@@ -14,16 +14,6 @@ variable "default_vpc_prefix" {
   default = "10.24.0.0/16"
 }
 
-variable "ssh_public_key" {
-  description = "SSH public key to be used for authenticating to resources"
-  default     = "~/.ssh/id_rsa.pub"
-}
-
-variable "ssh_private_key" {
-  description = "SSH private key to be used for authenticating to resources"
-  default     = "~/.ssh/id_rsa"
-}
-
 variable "ssh_key_name" {
   description = "Name of the existing SSH key"
   type = string
@@ -36,7 +26,7 @@ variable "jump_host_os_image" {
   default = "ibm-ubuntu-22-04-minimal-amd64-1"
 }
 
-variable "esxi_os_image" {
-  description = "OS image used for the esxi bare metal server"
-  default = "ibm-esxi-7-0u3g-20328353-byol-amd64-1"
+variable "ssh_public_key" {
+  description = "SSH public key to be used for authenticating to resources"
+  default     = "~/.ssh/id_rsa.pub"
 }
