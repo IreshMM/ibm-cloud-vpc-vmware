@@ -20,7 +20,7 @@ provider "vsphere" {
   alias                = "vsphere"
   user                 = "administrator@${module.ibm-cloud-infr.vcenter_domain}"
   password             = var.vsphere_password
-  vsphere_server       = "${module.ibm-cloud-infr.vcenter_fqdn}:4443"
+  vsphere_server       = module.ibm-cloud-infr.vcenter_fqdn
   allow_unverified_ssl = true
 }
 
@@ -43,7 +43,6 @@ variable "vsphere_user" {
 
 variable "vsphere_password" {
   type    = string
-  default = "Gate3Stop#"
 }
 
 variable "vsphere_server" {

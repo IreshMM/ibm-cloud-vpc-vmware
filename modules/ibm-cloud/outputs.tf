@@ -14,11 +14,11 @@ output "vcenter_domain" {
   value = module.vsphere-site.vcenter_domain
 }
 
-output "esxi_host_fqdn" {
-  value = module.vsphere-site.esxi_host_fqdn
+output "esxi_host_fqdns" {
+  value = module.vsphere-site.esxi_host_fqdns
 }
 
-output "esxi_host_password" {
-  value     = module.vsphere-site.esxi_host_password
+output "esxi_host_passwords" {
+  value     = module.vsphere-site.esxi_host_passwords
   sensitive = true
 }

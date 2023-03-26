@@ -11,12 +11,13 @@ resource "ibm_dns_permitted_network" "vmware-site-dns-zone-permitted-network" {
   type        = "vpc"
 }
 
-resource "ibm_dns_resource_record" "esxi-host-record" {
+resource "ibm_dns_resource_record" "esxi-host-records" {
+  count       = var.esxi_host_count
   instance_id = var.dns_service_guid
   zone_id     = ibm_dns_zone.vmware-site-dns-zone.zone_id
   type        = "A"
-  name        = "esxi-host0"
-  rdata       = ibm_is_bare_metal_server.esxi-host.primary_network_interface[0].primary_ip[0].address
+  name        = local.esxi_host_info[count.index].esxi_host_hostname 
+  rdata       = local.esxi_host_info[count.index].esxi_host_ip
 }
 
 resource "ibm_dns_resource_record" "vcenter-record" {
@@ -24,7 +25,7 @@ resource "ibm_dns_resource_record" "vcenter-record" {
   zone_id     = ibm_dns_zone.vmware-site-dns-zone.zone_id
   type        = "A"
   name        = "vcenter"
-  rdata       = ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address
+  rdata       = local.esxi_host_info[0].vcenter_nic_ip
 }
 
 resource "ibm_dns_resource_record" "vcenter-record-reverse" {
@@ -32,6 +33,6 @@ resource "ibm_dns_resource_record" "vcenter-record-reverse" {
   instance_id = var.dns_service_guid
   zone_id     = ibm_dns_zone.vmware-site-dns-zone.zone_id
   type        = "PTR"
-  name        = ibm_is_bare_metal_server_network_interface.vcenter-nic.primary_ip[0].address
+  name        = local.esxi_host_info[0].vcenter_nic_ip
   rdata       = "vcenter.${ibm_dns_zone.vmware-site-dns-zone.name}"
 }

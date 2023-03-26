@@ -20,9 +20,18 @@ variable "ssh_public_key" {
   default     = "~/.ssh/id_rsa.pub"
 }
 
+variable "bare_metal_profile" {
+  default = "cx2-metal-96x192"
+}
+
+variable "esxi_host_count" {
+  description = "The number esxi hosts"
+  default = 1
+}
+
 variable "esxi_os_image" {
   description = "OS image used for the esxi bare metal server"
-  default = "ibm-esxi-7-0u3g-20328353-byol-amd64-1"
+  default = "r006-41460465-7a20-4bc8-b7b0-d8c058e34208"
 }
 
 variable "ssh_key_id" {
@@ -38,15 +47,7 @@ variable "vmware_vpc_crn" {
 }
 
 variable "vmware_vpc_prefix" {
-  default = "10.1.0.0/16"
-}
-
-variable "apic_subsys_vpc_prefix" {
-  default = "192.168.72.0/24"
-}
-
-variable "apic_gw_vpc_prefix" {
-  default = "192.168.73.0/24"
+  description = "Network prefix of the VPC for creating subnets in"
 }
 
 variable "public_gateway_id" { }

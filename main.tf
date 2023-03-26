@@ -18,6 +18,7 @@ module "vmware-vcenter-infr" {
 
   zone                  = var.zone
   region                = var.region
-  vsphere_host_password = module.ibm-cloud-infr.esxi_host_password
-  vsphere_host_fqdn     = module.ibm-cloud-infr.esxi_host_fqdn
+  vsphere_host_passwords = module.ibm-cloud-infr.esxi_host_passwords
+  vsphere_host_fqdns     = module.ibm-cloud-infr.esxi_host_fqdns
+
 }

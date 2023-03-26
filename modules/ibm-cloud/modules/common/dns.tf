@@ -23,5 +23,5 @@ resource "ibm_dns_resource_record" "jump-host-record" {
   zone_id     = ibm_dns_zone.vmware-dns-zone.zone_id
   type        = "A"
   name        = "jump-host"
-  rdata       = ibm_is_instance.jump-host.primary_network_interface[0].primary_ipv4_address
+  rdata       = ibm_is_instance.jump-host.primary_network_interface[0].primary_ip[0].address
 }

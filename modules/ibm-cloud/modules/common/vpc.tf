@@ -1,5 +1,5 @@
 resource "ibm_is_vpc" "vmw-apic" {
-  name = "vmw-apic"
+  name = var.vpc_name
 }
 
 resource "ibm_is_vpc_address_prefix" "default-vpc-prefix" {

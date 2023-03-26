@@ -1,3 +1,7 @@
+data "ibm_is_image" "jump-host-os-image" {
+  name = var.jump_host_os_image
+}
+
 resource "ibm_is_instance" "jump-host" {
   name    = "jump-host"
   image   = data.ibm_is_image.jump-host-os-image.id
@@ -27,10 +31,6 @@ resource "ibm_is_instance" "jump-host" {
   zone = var.zone
 }
 
-data "ibm_is_image" "jump-host-os-image" {
-  name = var.jump_host_os_image
-}
-
 resource "ibm_is_floating_ip" "jump-host-fip" {
   name   = "jump-host-fip"
   target = ibm_is_instance.jump-host.primary_network_interface[0].id
@@ -51,16 +51,16 @@ resource "ibm_is_security_group_rule" "allow-ssh" {
   }
 }
 
-resource "null_resource" "jump-host-provisioner" {
-  depends_on = [
-    ibm_is_instance.jump-host,
-    ibm_is_floating_ip.jump-host-fip
-  ]
-  provisioner "local-exec" {
-    interpreter = [
-      "/usr/bin/bash", "-c"
-    ]
-    working_dir = "${path.module}/external/provisioners/jump-host-provision"
-    command     = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
-  }
-}
+# resource "null_resource" "jump-host-provisioner" {
+#   depends_on = [
+#     ibm_is_instance.jump-host,
+#     ibm_is_floating_ip.jump-host-fip
+#   ]
+#   provisioner "local-exec" {
+#     interpreter = [
+#       "/usr/bin/bash", "-c"
+#     ]
+#     working_dir = "${path.module}/external/provisioners/jump-host-provision"
+#     command     = "ansible-playbook -i ${ibm_is_floating_ip.jump-host-fip.address}, -u root site.yaml"
+#   }
+# }

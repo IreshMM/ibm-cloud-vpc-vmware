@@ -8,6 +8,12 @@ variable "region" {
   default = "us-south"
 }
 
+variable "vpc_name" {
+  description = "Name for the VPC"
+  type = string
+  default = "vmw-apic"
+}
+
 variable "default_vpc_prefix" {
   description = "Prefix for the default VPC subnet"
   type = string

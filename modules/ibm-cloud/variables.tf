@@ -38,5 +38,5 @@ variable "jump_host_os_image" {
 
 variable "esxi_os_image" {
   description = "OS image used for the esxi bare metal server"
-  default = "ibm-esxi-7-0u3g-20328353-byol-amd64-1"
+  default = "r006-41460465-7a20-4bc8-b7b0-d8c058e34208"
 }

@@ -10,7 +10,7 @@ output "vcenter_fqdn" {
   value = module.ibm-cloud-infr.vcenter_fqdn
 }
 
-output "esxi_host_password" {
-  value     = module.ibm-cloud-infr.esxi_host_password
+output "esxi_host_passwords" {
+  value     = module.ibm-cloud-infr.esxi_host_passwords
   sensitive = true
 }
