@@ -11,7 +11,7 @@ resource "ibm_is_bare_metal_server" "esxi-host" {
       address     = var.esxi_host_ip
       auto_delete = true
     }
-    allowed_vlans = [100, 200, 300, 400]
+    allowed_vlans = [100, 200, 300, 400, 1200, 1300, 1400]
   }
   vpc       = var.vmware_vpc_id
   user_data = <<EOT
