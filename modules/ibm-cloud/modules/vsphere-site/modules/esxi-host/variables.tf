@@ -16,7 +16,6 @@ variable "ssh_private_key" {
 }
 
 variable "bare_metal_profile" {
-  default = "cx2-metal-96x192"
 }
 
 variable "esxi_os_image" {

@@ -21,7 +21,7 @@ variable "ssh_public_key" {
 }
 
 variable "bare_metal_profile" {
-  default = "cx2-metal-96x192"
+  default = "cx2d-metal-96x192"
 }
 
 variable "esxi_host_count" {
